@@ -7,17 +7,23 @@
     <Authors>Findlay</Authors>
     <Company>FinNTEu</Company>
     <Description>NetCore.RequestHelper is a simple library which allows you to send requests with complex parameters</Description>
-    <PackageId>NetCore.RequestHelper</PackageId>
+    <PackageId>DotNet.Core.RequestHelper</PackageId>
     <ApplicationIcon />
     <StartupObject />
     <AssemblyName>RequestHelper</AssemblyName>
     <RootNamespace>RequestHelper</RootNamespace>
     <Product>NetCore.RequestHelper</Product>
     <PackageTags>DotNet, RequestHelper, Request, Http</PackageTags>
+    <PackageReleaseNotes />
+    <RepositoryUrl>https://github.com/EuFindlay/RequestHelper</RepositoryUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/EuFindlay/RequestHelper/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl></PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Win32Resource />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
   </ItemGroup>
 
 </Project>
