@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RequestHelperSample.Data.Context;
+using RequestHelperSample.Data.Repositories;
+using RequestHelperSample.Data.TestDataInitializer;
 
 namespace RequestHelperSample
 {
@@ -26,6 +28,10 @@ namespace RequestHelperSample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IStudentRepository, StudentRepository>();
+            services.AddTransient<IGradeRepository, GradeRepository>();
+            services.Configure<AppSettings>(Configuration);
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -33,9 +39,14 @@ namespace RequestHelperSample
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            var connection = @"Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;";
+            var connection = @"Server=localhost\SQLEXPRESS;Database=RequestHelperSample;Trusted_Connection=True;";
             services.AddDbContext<DatabaseContext>
                 (options => options.UseSqlServer(connection));
+
+            var dbContext = services.BuildServiceProvider()
+                       .GetService<DatabaseContext>();
+
+            TestDataInitializer.Init(dbContext);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -61,7 +72,7 @@ namespace RequestHelperSample
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Samples}/{action=Index}/{id?}");
             });
         }
     }

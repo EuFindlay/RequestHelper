@@ -4,14 +4,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RequestHelperSample.Data.Repositories;
 using RequestHelperSample.Models;
 
 namespace RequestHelperSample.Controllers
 {
     public class HomeController : Controller
     {
+        private IStudentRepository _studentRepository { get; set; }
+
+        public HomeController(IStudentRepository studentRepository)
+        {
+            _studentRepository = studentRepository;
+        }
+
         public IActionResult Index()
         {
+            var result = _studentRepository.GetAll();
             return View();
         }
 

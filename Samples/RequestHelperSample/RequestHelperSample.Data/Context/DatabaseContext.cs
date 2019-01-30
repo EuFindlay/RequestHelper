@@ -11,7 +11,30 @@ namespace RequestHelperSample.Data.Context
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         { }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Product> Products { get; set; }
+        public DatabaseContext()
+        {
+
+        }
+
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Grade> Grades { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=RequestHelperSample;Trusted_Connection=True;");
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Student>(entity =>
+            {
+                entity.HasOne(d => d.Grade)
+                    .WithMany(p => p.Students)
+                    .HasForeignKey(d => d.GradeId);
+            });
+        }
     }
 }

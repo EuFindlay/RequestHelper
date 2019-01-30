@@ -5,6 +5,9 @@ body {
     padding-bottom: 20px;
 }
 
+.margin-top-30 {
+    margin-top: 30px;
+}
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -34,4 +37,38 @@ body {
     .carousel-caption {
         display: none;
     }
+}
+
+.search-panel .size-control {
+    width: 70px !important;
+}
+
+.search-panel .size-control-parent {
+    width: fit-content;
+    display: inline-block;
+    position: relative;
+}
+
+    .search-panel .size-control-parent.from {
+        margin-right: 20px;
+    }
+
+        .search-panel .size-control-parent.from::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            height: 3px;
+            background: black;
+            width: 40px;
+            left: 100%;
+            top: calc(50% - 2px);
+        }
+
+.search-panel .inline-block {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.default-color {
+    background-color: whitesmoke;
 }
