@@ -71,5 +71,57 @@ namespace RequestHelper.Test
         }
 
         #endregion
+
+
+        #region EmptyModel
+
+        private NullableModel GetNullableModel()
+        {
+            return new NullableModel()
+            {
+                HeightFrom = RandomHelper.RandomInt()
+            };
+        }
+
+        [TestMethod]
+        public void NullableModelAddTest()
+        {
+            NullableModel model = GetNullableModel();
+
+            RequestParameters testParameters = new RequestParameters();
+            testParameters.Add("model", model);
+
+            ParametersDictionary expectedParameters = new ParametersDictionary()
+            {
+                new KeyValuePair<string, string>(
+                   $"{nameof(model)}.{nameof(model.HeightFrom)}",
+                   $"{model.HeightFrom}"),
+            };
+
+            RequestParameters expectedCollection = new RequestParameters(expectedParameters);
+
+            Assert.AreEqual(testParameters.ToString(), expectedCollection.ToString());
+        }
+
+        [TestMethod]
+        public void NullableModelCreateTest()
+        {
+            NullableModel model = GetNullableModel();
+
+            RequestParameters testParameters = RequestParameters.CreateFromModel(model);
+
+            ParametersDictionary expectedParameters = new ParametersDictionary()
+            {
+                new KeyValuePair<string, string>(
+                   $"{nameof(model.HeightFrom)}",
+                   $"{model.HeightFrom}"),
+            };
+
+            RequestParameters expectedCollection = new RequestParameters(expectedParameters);
+
+            Assert.AreEqual(testParameters.ToString(), expectedCollection.ToString());
+        }
+
+        #endregion
     }
 }
