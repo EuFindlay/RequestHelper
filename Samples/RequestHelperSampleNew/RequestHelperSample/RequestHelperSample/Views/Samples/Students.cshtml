@@ -1,0 +1,131 @@
+﻿@using RequestHelperSample.ViewModels
+
+@model StudentSearchModel
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
+
+<script>
+    $(function () {
+        jQuery('#grades-select').multiselect({
+        });
+    })
+</script>
+
+<div class="panel-group margin-top-30">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#search-collapse">Search</a>
+            </h4>
+        </div>
+        <div id="search-collapse" class="panel-collapse collapse in">
+            <div class="panel-body default-color">
+                @using (Html.BeginForm("Students", "Samples", FormMethod.Get))
+                {
+                    <div class="search-panel">
+                        <div class="form-inline">
+                            <div class="inline-block">
+                                <label>
+                                    Name
+                                </label>
+                                <div class="form-inline">
+                                    <input asp-for="@Model.SearchParameters.NameSearchText" id="search-text" name="NameSearchText" class="form-control" type="text" />
+                                </div>
+                            </div>
+
+                            <div class="inline-block">
+                                <label>
+                                    Height diapasone
+                                </label>
+                                <div class="form-inline">
+                                    <div class="size-control-parent from">
+                                        <input asp-for="@Model.SearchParameters.HeightFrom" id="height-from" name="HeightFrom" class="form-control size-control from" type="number" />
+                                    </div>
+                                    <div class="size-control-parent">
+                                        <input asp-for="@Model.SearchParameters.HeightTo" id="height-to" name="HeightTo" class="form-control size-control" type="number" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="inline-block">
+                                <label>
+                                    Weight diapasone
+                                </label>
+                                <div class="form-inline">
+                                    <div class="size-control-parent from">
+                                        <input asp-for="@Model.SearchParameters.WeightFrom" id="weight-from" name="WeightFrom" class="form-control size-control from" type="number" />
+                                    </div>
+
+                                    <div class="size-control-parent">
+                                        <input asp-for="@Model.SearchParameters.WeightTo" id="weight-to" name="WeightTo" class="form-control size-control" type="number" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="inline-block">
+                                <label>
+                                    Grade
+                                </label>
+                                <div class="form-inline">
+                                    <select multiple id="grades-select" asp-items="@Model.AvailableGrades" name="SelectedGradeIds" class="form-control"></select>
+                                </div>
+                            </div>
+
+                            <div class="inline-block">
+                                <button type="submit" id="search-btn" class="btn btn-primary">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+                </div>
+            <div class="panel-footer"></div>
+        </div>
+    </div>
+</div>
+
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#search-results-collapse">Results</a>
+            </h4>
+        </div>
+        <div id="search-results-collapse" class="panel-collapse collapse in">
+            <div class="panel-body default-color">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Height</th>
+                                    <th>Weight</th>
+                                </tr>
+                            </thead>
+                            @if (Model.SearchResult.Count > 0)
+                            {
+                                @foreach (var student in Model.SearchResult)
+                                {
+                                    <tr>
+                                        <td>@student.Id</td>
+                                        <td>@student.StudentName</td>
+                                        <td>@student.Height</td>
+                                        <td>@student.Weight</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>No matches</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
