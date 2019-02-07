@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RequestHelperSample.Data.Helpers;
 using RequestHelperSample.Data.Models;
 using RequestHelperSample.Data.Repositories;
 using RequestHelperSample.Data.ViewModels;
@@ -20,6 +21,16 @@ namespace RequestHelperSample.API.Controllers
         {
             _studentRepository = studentRepository;
         }
+
+        [HttpGet("GetAll")]
+        public StudentsSearchResponse GetAll()
+        {
+            var searchResponse = new StudentsSearchResponse();
+            searchResponse.Students = _studentRepository.GetAll();
+
+            return searchResponse;
+        }
+
 
         [HttpGet("Search")]
         public StudentsSearchResponse SearchStudents([FromQuery]StudentsSearchRequest request, [FromQuery]bool test)
@@ -58,6 +69,17 @@ namespace RequestHelperSample.API.Controllers
             searchResponse.Students = students.ToList();
 
             return searchResponse;
+        }
+
+        [HttpPost("UpdatePhoto")]
+        public async Task UpdatePhoto([FromForm]LoadPhotoRequest request)
+        {
+            string pictureFileName = FileHelper.SaveFile(request.Photo);
+            var student = await _studentRepository.GetByIdAsync(request.StudentId);
+
+            student.PhotoImageName = pictureFileName;
+            _studentRepository.Update(student);
+            await _studentRepository.CommitAsync();
         }
     }
 }

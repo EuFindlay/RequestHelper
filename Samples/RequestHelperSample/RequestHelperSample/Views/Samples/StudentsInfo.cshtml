@@ -1,0 +1,143 @@
+﻿@using RequestHelperSample.ViewModels
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/solid.css" integrity="sha384-r/k8YTFqmlOaqRkZuSiE9trsrDXkh07mRaoGBMoDcmA58OHILZPsk29i2BsFng1B" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/regular.css" integrity="sha384-IG162Tfx2WTn//TRUi9ahZHsz47lNKzYOp0b6Vv8qltVlPkub2yj9TVwzNck6GEF" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/brands.css" integrity="sha384-BKw0P+CQz9xmby+uplDwp82Py8x1xtYPK3ORn/ZSoe6Dk3ETP59WCDnX+fI1XCKK" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/fontawesome.css" integrity="sha384-4aon80D8rXCGx9ayDt85LbyUHeMWd3UiBaWliBlJ53yzm9hqN21A+o1pqoyK04h+" crossorigin="anonymous">
+
+@model StudentsInfoModel
+
+<div class="panel-group margin-top-30">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#search-results-collapse">Students</a>
+            </h4>
+        </div>
+        <div id="search-results-collapse" class="panel-collapse collapse in">
+            <div class="panel-body default-color">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Photo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @if (Model.Students.Count > 0)
+                            {
+                                @foreach (var student in Model.Students)
+                                {
+                                    <tr>
+                                        <td>@student.Id</td>
+                                        <td>@student.StudentName</td>
+                                        <td>@student.PhotoImageName</td>
+                                        <td width="175">
+                                            <label for="file-upload-@student.Id" class="custom-file-upload">
+                                                <i class="fa fa-cloud"></i> Upload Photo
+                                            </label>
+                                            <input id="file-upload-@student.Id" class="file-upload" data-student-id="@student.Id" type="file" />
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>No matches</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-picture-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Upload
+            </div>
+            <div class="modal-body text-center">
+                <img style="max-width:200px; max-height:200px" id="image-preview" src="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a id="load-picture-confirm-btn" class="btn btn-success btn-ok">Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    $(document).on('change', '.file-upload', function () {
+        debugger;
+        $('.file-upload').removeClass('active');
+        $(this).addClass('active');
+        $('#load-picture-confirm-btn').data('student-id', $(this).attr('data-student-id'));
+
+        if ($(this).val()) {
+            var preview = $('#image-preview');
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                preview.css('background', 'none');
+                preview.src = reader.result;
+                preview.attr('src', reader.result);
+                $('#confirm-picture-upload').modal('show');
+            };
+            reader.readAsDataURL($(this).prop('files')[0]);
+        }
+    });
+
+    $(document).on('click', '#load-picture-confirm-btn', function () {
+        var formData = new FormData();
+        var studentId = $('#load-picture-confirm-btn').data('student-id');
+
+        formData.append('Photo', $('.file-upload.active')[0].files[0]);
+        formData.append('StudentId', studentId);
+
+        var url = '@Url.Action("LoadStudentPhoto", "Samples")';
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                swal({
+                    title: "Success!",
+                    text: "Picture has been successfully updated",
+                    type: "success",
+                    showCancelButton: false
+                }, function () {
+                    window.location.reload();
+                });
+            },
+            error: function (data) {
+                swal("Oops!", data.responseText, "error");
+            }
+        });
+    });
+</script>

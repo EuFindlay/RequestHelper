@@ -18,9 +18,9 @@ namespace RequestHelper
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
 
             List<PropertyInfo> fileProperties = GetPropertiesForConverting(model);
+            AddNonFilePropertiesToCollection(model, ref multiContent);
 
             AddFilePropertiesToCollection(fileProperties, model, ref multiContent);
-            AddNonFilePropertiesToCollection(model, ref multiContent);
 
             return multiContent;
         }
@@ -52,7 +52,7 @@ namespace RequestHelper
 
             foreach (var parameter in generatedParameters)
             {
-                formContent.Add(new StringContent(parameter.Key), parameter.Value);
+                formContent.Add(new StringContent(parameter.Value), $"\"{parameter.Key}\"");
             }
         }
 

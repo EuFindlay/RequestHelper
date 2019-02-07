@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RequestHelperSample.Data.Context;
+using RequestHelperSample.Data.Helpers;
 using RequestHelperSample.Data.Repositories;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -50,6 +52,8 @@ namespace RequestHelperSample.API
 
             var dbContext = services.BuildServiceProvider()
                        .GetService<DatabaseContext>();
+
+            FileHelper.Initialize("RequestHelperSample.Content\\Images", Directory.GetParent(Directory.GetCurrentDirectory()).FullName);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

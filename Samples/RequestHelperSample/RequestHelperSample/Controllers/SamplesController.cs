@@ -48,11 +48,34 @@ namespace RequestHelperSample.Controllers
             }
 
             model.SearchParameters = searchRequest;
-            model.AvailableGrades = _gradeRepository.GetAll().Select(x => 
-                new SelectListItem(x.GradeName, x.Id.ToString(), 
+            model.AvailableGrades = _gradeRepository.GetAll().Select(x =>
+                new SelectListItem(x.GradeName, x.Id.ToString(),
                     searchRequest.SelectedGradeIds == null ? false : searchRequest.SelectedGradeIds.Contains(x.Id))).ToList();
 
             return View(model);
+        }
+
+        public async Task<IActionResult> StudentsInfo()
+        {
+            var model = new StudentsInfoModel();
+
+            var response = await GetRequest($@"{_settings.Value.ApiUrl}/api/Student/GetAll");
+            var responseObject = JsonConvert.DeserializeObject<StudentsSearchResponse>(
+                        await response.Content.ReadAsStringAsync());
+
+            model.Students = responseObject.Students;
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> LoadStudentPhoto(LoadPhotoRequest request)
+        {
+            MultipartFormDataContent dataModel = MultipartFormDataBuilder.ConvertModelToFormData(request);
+            var response = await PostFileModel($@"{_settings.Value.ApiUrl}/api/Student/UpdatePhoto", dataModel);
+
+            var data = await response.Content.ReadAsStringAsync();
+
+            return Ok();
         }
 
         private async Task<HttpResponseMessage> GetRequest(string uri, RequestParameters parameters = null)
@@ -66,6 +89,16 @@ namespace RequestHelperSample.Controllers
 
             HttpResponseMessage response = new HttpResponseMessage();
             response = await httpClient.GetAsync(uri);
+
+            return response;
+        }
+
+        private async Task<HttpResponseMessage> PostFileModel(string uri, MultipartFormDataContent dataModel, string authorizationMethod = "Bearer")
+        {
+            var httpClient = new HttpClient();
+
+            HttpResponseMessage response = new HttpResponseMessage();
+            response = await httpClient.PostAsync(uri, dataModel);
 
             return response;
         }
