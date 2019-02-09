@@ -1,7 +1,7 @@
 # RequestHelper
 NetCore.RequestHelper is reflection based tool that simplifies the proccess of passing data to API methods
 
-[Sample of using DotNet.Core.RequestHelper](https://github.com/EuFindlay/RequestHelper/tree/master/Samples/RequestHelperSample "Sample")
+[Sample of using RequestHelper](https://github.com/EuFindlay/RequestHelper/tree/master/Samples/RequestHelperSample "Sample")
 
 ### Features
 - Supports various data types: Lists, nullable types, custom models, etc
