@@ -9,7 +9,7 @@ RequestParameters parametersCollection = RequestParameters.CreateFromModel(model
 string urlParameters = parametersCollection.ToString();
 ```
 
-#### 2. With multiple parameters / object
+#### 2. With multiple parameters / objects
 ```csharp
 int value = 1;
 string text = "test";
