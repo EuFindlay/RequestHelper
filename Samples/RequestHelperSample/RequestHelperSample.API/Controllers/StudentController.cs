@@ -22,7 +22,7 @@ namespace RequestHelperSample.API.Controllers
             _studentRepository = studentRepository;
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("get-all")]
         public StudentsSearchResponse GetAll()
         {
             var searchResponse = new StudentsSearchResponse();
@@ -31,8 +31,7 @@ namespace RequestHelperSample.API.Controllers
             return searchResponse;
         }
 
-
-        [HttpGet("Search")]
+        [HttpGet("search")]
         public StudentsSearchResponse SearchStudents([FromQuery]StudentsSearchRequest request, [FromQuery]bool test)
         {
             var students = _studentRepository.GetAllQ();
@@ -71,7 +70,7 @@ namespace RequestHelperSample.API.Controllers
             return searchResponse;
         }
 
-        [HttpPost("UpdatePhoto")]
+        [HttpPost("update-photo")]
         public async Task UpdatePhoto([FromForm]LoadPhotoRequest request)
         {
             string pictureFileName = FileHelper.SaveFile(request.Photo);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -10,9 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using RequestHelperSample.Data.Context;
+using RequestHelperSample.Data.DbInitializer;
+using RequestHelperSample.Data.Helpers;
 using RequestHelperSample.Data.Repositories;
-using RequestHelperSample.Data.TestDataInitializer;
 
 namespace RequestHelperSample
 {
@@ -39,20 +42,14 @@ namespace RequestHelperSample
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            var connection = @"Server=localhost\SQLEXPRESS;Database=RequestHelperSample;Trusted_Connection=True;";
-            services.AddDbContext<DatabaseContext>
-                (options => options.UseSqlServer(connection));
-
-            var dbContext = services.BuildServiceProvider()
-                       .GetService<DatabaseContext>();
-
-            TestDataInitializer.Init(dbContext);
+            FileHelper.Initialize("RequestHelperSample.Content\\Images",
+                Directory.GetParent(Directory.GetCurrentDirectory()).FullName);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +63,14 @@ namespace RequestHelperSample
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    FileHelper.FileSavePath),
+                RequestPath = "/shared-images"
+            });
+
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

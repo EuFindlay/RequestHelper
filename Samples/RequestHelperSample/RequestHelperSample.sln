@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestHelperSample", "Requ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestHelperSample.Data", "RequestHelperSample.Data\RequestHelperSample.Data.csproj", "{3EF00FA5-8DA6-494E-B56D-8ACB8938A61B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestHelperSample.API", "RequestHelperSample.API\RequestHelperSample.API.csproj", "{BE07CC1F-1E24-4DE0-A05C-0D05490DA5A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestHelperSample.API", "RequestHelperSample.API\RequestHelperSample.API.csproj", "{BE07CC1F-1E24-4DE0-A05C-0D05490DA5A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RequestHelperSample.Content", "RequestHelperSample.Content", "{911AE21C-3283-4DFA-84ED-A078C862E108}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{A890261E-8FA8-4A21-87B6-25D81C9BCFBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +34,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A890261E-8FA8-4A21-87B6-25D81C9BCFBA} = {911AE21C-3283-4DFA-84ED-A078C862E108}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA57C6AA-5585-43C8-BFCD-DBD7126662C9}

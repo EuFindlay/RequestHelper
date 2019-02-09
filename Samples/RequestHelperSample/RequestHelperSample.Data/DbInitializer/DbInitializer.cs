@@ -3,15 +3,15 @@ using RequestHelperSample.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
-namespace RequestHelperSample.Data.TestDataInitializer
+namespace RequestHelperSample.Data.DbInitializer
 {
-    public static class TestDataInitializer
+    public static class DbInitializer
     {
-        private static Random random = new Random();
+        private static Random _random = new Random();
 
-        public static void Init(DatabaseContext context)
+        public static void AddTestData(this DatabaseContext context)
         {
             context.Database.EnsureCreated();
 
@@ -52,7 +52,7 @@ namespace RequestHelperSample.Data.TestDataInitializer
                 "Jefferey Epperson"
             };
 
-            foreach(var name in names)
+            foreach (var name in names)
             {
                 testStudents.Add(new Student()
                 {
@@ -60,7 +60,7 @@ namespace RequestHelperSample.Data.TestDataInitializer
                     Height = 120,
                     Weight = 40,
                     PhotoImageName = null,
-                    GradeId = grades[random.Next(0, grades.Count)].Id
+                    GradeId = grades[_random.Next(0, grades.Count)].Id
                 });
             }
 

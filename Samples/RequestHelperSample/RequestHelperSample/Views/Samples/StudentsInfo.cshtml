@@ -1,4 +1,5 @@
 ﻿@using RequestHelperSample.ViewModels
+@using RequestHelperSample.Data.Helpers
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/solid.css" integrity="sha384-r/k8YTFqmlOaqRkZuSiE9trsrDXkh07mRaoGBMoDcmA58OHILZPsk29i2BsFng1B" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/regular.css" integrity="sha384-IG162Tfx2WTn//TRUi9ahZHsz47lNKzYOp0b6Vv8qltVlPkub2yj9TVwzNck6GEF" crossorigin="anonymous">
@@ -34,7 +35,14 @@
                                     <tr>
                                         <td>@student.Id</td>
                                         <td>@student.StudentName</td>
-                                        <td>@student.PhotoImageName</td>
+                                        <td>
+                                            @if(!String.IsNullOrEmpty(student.PhotoImageName))
+                                            {
+                                            <div>
+                                                <img class="sample-image" src="~/shared-images/@student.PhotoImageName" />
+                                            </div>
+                                            }
+                                        </td>
                                         <td width="175">
                                             <label for="file-upload-@student.Id" class="custom-file-upload">
                                                 <i class="fa fa-cloud"></i> Upload Photo
@@ -75,20 +83,6 @@
     </div>
 </div>
 
-
-<style>
-    input[type="file"] {
-        display: none;
-    }
-
-    .custom-file-upload {
-        border: 1px solid #ccc;
-        display: inline-block;
-        padding: 6px 12px;
-        cursor: pointer;
-    }
-</style>
-
 <script>
     $(document).on('change', '.file-upload', function () {
         debugger;
@@ -126,17 +120,9 @@
             processData: false,
             contentType: false,
             success: function (result) {
-                swal({
-                    title: "Success!",
-                    text: "Picture has been successfully updated",
-                    type: "success",
-                    showCancelButton: false
-                }, function () {
-                    window.location.reload();
-                });
+                window.location.reload();
             },
             error: function (data) {
-                swal("Oops!", data.responseText, "error");
             }
         });
     });

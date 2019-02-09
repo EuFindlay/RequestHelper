@@ -18,14 +18,9 @@ namespace RequestHelperSample.Data.Helpers
             _rootPath = rootPath;
         }
 
-        private static string FileSavePath
+        public static string FileSavePath
         {
-            get { return $"{_rootPath}//{_folderPath}"; }
-        }
-
-        public static string GetFileFullPath(string name)
-        {
-            return FileSavePath;
+            get { return $"{_rootPath}\\{_folderPath}"; }
         }
 
         public static string SaveFile(IFormFile file)

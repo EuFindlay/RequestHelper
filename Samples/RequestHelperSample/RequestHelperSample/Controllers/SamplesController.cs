@@ -12,17 +12,16 @@ using RequestHelper;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RequestHelperSample.Data.Models;
+using Microsoft.AspNetCore.Hosting;
 
 namespace RequestHelperSample.Controllers
 {
     public class SamplesController : Controller
     {
-        private readonly IGradeRepository _gradeRepository;
         private readonly IOptionsSnapshot<AppSettings> _settings;
 
-        public SamplesController(IGradeRepository gradeRepository, IOptionsSnapshot<AppSettings> settings)
+        public SamplesController(IOptionsSnapshot<AppSettings> settings)
         {
-            _gradeRepository = gradeRepository;
             _settings = settings;
         }
 
@@ -40,7 +39,7 @@ namespace RequestHelperSample.Controllers
                 var searchParameters = RequestParameters.CreateFromModel(searchRequest); // Generates url parameters from searchRequest object
                 searchParameters.Add("Test", true); // Also, you can specify additional parameters
 
-                var response = await GetRequest($@"{_settings.Value.ApiUrl}/api/Student/Search", searchParameters);
+                var response = await GetRequest($@"{_settings.Value.ApiUrl}/api/Student/search", searchParameters);
                 var responseObject = JsonConvert.DeserializeObject<StudentsSearchResponse>(
                             await response.Content.ReadAsStringAsync());
 
@@ -48,7 +47,12 @@ namespace RequestHelperSample.Controllers
             }
 
             model.SearchParameters = searchRequest;
-            model.AvailableGrades = _gradeRepository.GetAll().Select(x =>
+
+            var gradeResponse = await GetRequest($@"{_settings.Value.ApiUrl}/api/Grade/get-all");
+            var greadesList = JsonConvert.DeserializeObject<List<Grade>>(
+                        await gradeResponse.Content.ReadAsStringAsync());
+
+            model.AvailableGrades = greadesList.Select(x =>
                 new SelectListItem(x.GradeName, x.Id.ToString(),
                     searchRequest.SelectedGradeIds == null ? false : searchRequest.SelectedGradeIds.Contains(x.Id))).ToList();
 
@@ -59,7 +63,7 @@ namespace RequestHelperSample.Controllers
         {
             var model = new StudentsInfoModel();
 
-            var response = await GetRequest($@"{_settings.Value.ApiUrl}/api/Student/GetAll");
+            var response = await GetRequest($@"{_settings.Value.ApiUrl}/api/Student/get-all");
             var responseObject = JsonConvert.DeserializeObject<StudentsSearchResponse>(
                         await response.Content.ReadAsStringAsync());
 
@@ -71,7 +75,7 @@ namespace RequestHelperSample.Controllers
         public async Task<IActionResult> LoadStudentPhoto(LoadPhotoRequest request)
         {
             MultipartFormDataContent dataModel = MultipartFormDataBuilder.ConvertModelToFormData(request);
-            var response = await PostFileModel($@"{_settings.Value.ApiUrl}/api/Student/UpdatePhoto", dataModel);
+            var response = await PostFileModel($@"{_settings.Value.ApiUrl}/api/Student/update-photo", dataModel);
 
             var data = await response.Content.ReadAsStringAsync();
 
@@ -93,7 +97,7 @@ namespace RequestHelperSample.Controllers
             return response;
         }
 
-        private async Task<HttpResponseMessage> PostFileModel(string uri, MultipartFormDataContent dataModel, string authorizationMethod = "Bearer")
+        private async Task<HttpResponseMessage> PostFileModel(string uri, MultipartFormDataContent dataModel)
         {
             var httpClient = new HttpClient();
 

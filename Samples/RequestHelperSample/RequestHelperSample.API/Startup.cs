@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RequestHelperSample.Data.Context;
+using RequestHelperSample.Data.DbInitializer;
 using RequestHelperSample.Data.Helpers;
 using RequestHelperSample.Data.Repositories;
 using Swashbuckle.AspNetCore.Swagger;
@@ -46,20 +47,16 @@ namespace RequestHelperSample.API
                 });
             });
 
-            var connection = @"Server=localhost\SQLEXPRESS;Database=RequestHelperSample;Trusted_Connection=True;";
-            services.AddDbContext<DatabaseContext>
-                (options => options.UseSqlServer(connection));
+            services.AddDbContext<DatabaseContext>(opt => opt.UseInMemoryDatabase("SamplesDb"));
 
-            var dbContext = services.BuildServiceProvider()
-                       .GetService<DatabaseContext>();
-
-            FileHelper.Initialize("RequestHelperSample.Content\\Images", Directory.GetParent(Directory.GetCurrentDirectory()).FullName);
+            FileHelper.Initialize("RequestHelperSample.Content\\Images", 
+                Directory.GetParent(Directory.GetCurrentDirectory()).FullName);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -75,6 +72,9 @@ namespace RequestHelperSample.API
                   {
                       c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sample.API V1");
                   });
+
+            serviceProvider.GetService<DatabaseContext>().AddTestData();
+
             app.UseHttpsRedirection();
             app.UseMvc();
         }
