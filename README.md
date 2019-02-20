@@ -15,7 +15,9 @@ NetCore.RequestHelper is reflection based tool that simplifies the proccess of p
 ```csharp
  // model is an object that should be converted to an URL string
 RequestParameters parametersCollection = RequestParameters.CreateFromModel(model);
-string urlParameters = parametersCollection.ToString();
+
+string requestUrl = "http://test-url.com";
+parametersCollection.AddParametersToUrl(ref requestUrl);
 ```
 
 #### 2. With multiple parameters / objects
@@ -26,7 +28,9 @@ string text = "test";
 RequestParameters parametersCollection = new RequestParameters();
 parametersCollection.Add(value);
 parametersCollection.Add(text);
-string urlParameters = parametersCollection.ToString();
+
+string requestUrl = "http://test-url.com";
+parametersCollection.AddParametersToUrl(ref requestUrl);
 ````
 
 ### Posting files to API
