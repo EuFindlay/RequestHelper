@@ -13,10 +13,10 @@ NetCore.RequestHelper is reflection based tool that simplifies the proccess of p
 ### Serialization of an data objects to an URL encoded string
 #### 1. Direct from object
 ```csharp
+string requestUrl = "http://test-url.com";
+
  // model is an object that should be converted to an URL string
 RequestParameters parametersCollection = RequestParameters.CreateFromModel(model);
-
-string requestUrl = "http://test-url.com";
 parametersCollection.AddParametersToUrl(ref requestUrl);
 ```
 
@@ -24,12 +24,12 @@ parametersCollection.AddParametersToUrl(ref requestUrl);
 ```csharp
 int value = 1;
 string text = "test";
+string requestUrl = "http://test-url.com";
 
 RequestParameters parametersCollection = new RequestParameters();
 parametersCollection.Add(value);
 parametersCollection.Add(text);
 
-string requestUrl = "http://test-url.com";
 parametersCollection.AddParametersToUrl(ref requestUrl);
 ````
 
