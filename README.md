@@ -1,6 +1,15 @@
 # RequestHelper
 NetCore.RequestHelper is reflection based tool that simplifies the proccess of passing data to API methods
 
+[Sample of using RequestHelper](https://github.com/EuFindlay/RequestHelper/tree/master/Samples/RequestHelperSample "Sample")
+
+### Features
+- Supports various data types: Lists, nullable types, custom models, etc
+- Supports embeded models
+- Has set of custom attributes for better configuration
+
+# Documentation 
+
 ### Serialization of an data objects to an URL encoded string
 #### 1. Direct from object
 ```csharp
@@ -19,7 +28,30 @@ parametersCollection.Add(value);
 parametersCollection.Add(text);
 string urlParameters = parametersCollection.ToString();
 ````
-### Features
-- Supports various data types: Lists, nullable types, custom models, etc
-- Supports embeded models
-- Has set of custom attributes for better configuration
+
+### Posting files to API
+
+#### Test model with file property
+```csharp
+    public class PhotoModel
+    {
+        public int StudentId { get; set; }
+		
+        [FileParameter] // required attribute for File property
+        public IFormFile Photo { get; set; }  //file property
+    }
+````
+
+#### Posting model to API from MVC Controller
+```csharp
+        public async Task<IActionResult> LoadStudentPhoto(PhotoModel request)
+        {
+            var httpClient = new HttpClient();
+        
+            // converting model to MultipartFormDataContent
+            var dataModel = MultipartFormDataBuilder.ConvertModelToFormData(request);
+            await httpClient.PostAsync("https://api-url.com", dataModel); // posting model to API
+			
+            return Ok();
+        }
+```
