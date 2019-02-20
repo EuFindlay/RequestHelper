@@ -86,7 +86,7 @@ namespace RequestHelperSample.Controllers
         {
             if (parameters != null)
             {
-                uri += "?" + parameters;
+                parameters.AddParametersToUrl(ref uri);
             }
 
             var httpClient = new HttpClient();

@@ -114,6 +114,13 @@ namespace RequestHelper
             return encodedUrlBuilder.ToString();
         }
 
+        public void AddParametersToUrl(ref string url)
+        {
+            if (_urlParameters != null)
+            {
+                url += $"?{this.ToString()}";
+            }
+        }
 
         #region Add property value methods 
 

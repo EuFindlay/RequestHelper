@@ -25,7 +25,7 @@ namespace RequestHelper.Extensions
         private static bool IsSimple(this Type objectType)
         {
             return objectType.IsPrimitive
-              || objectType.IsNullablePrimitive()
+              || objectType.IsNullableSimple()
               || objectType.IsEnum
               || objectType.Equals(typeof(String))
               || objectType.Equals(typeof(DateTime))
@@ -43,8 +43,20 @@ namespace RequestHelper.Extensions
             return objectType.Equals(typeof(IFormFile));
         }
 
-        private static bool IsNullablePrimitive(this Type objectType) => 
-            Nullable.GetUnderlyingType(objectType) != null && Nullable.GetUnderlyingType(objectType).IsPrimitive;
+        private static bool IsNullableSimple(this Type objectType)
+        {
+            var underlyingType = Nullable.GetUnderlyingType(objectType);
+
+            if (underlyingType == null)
+            {
+                return false;
+            }
+            
+            return underlyingType.IsPrimitive
+              || underlyingType.Equals(typeof(String))
+              || underlyingType.Equals(typeof(DateTime))
+              || underlyingType.Equals(typeof(Decimal));
+        }
 
     }
 }

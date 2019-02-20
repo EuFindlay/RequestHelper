@@ -5,7 +5,7 @@ using System.Linq;
 using RequestHelper;
 using RequestHelper.Models;
 using RequestHelper.Test.Helpers;
-using RequestHelper.Test.ModelsForConvert;
+using RequestHelper.Test.Models;
 
 namespace RequestHelper.Test
 {
@@ -18,8 +18,8 @@ namespace RequestHelper.Test
         {
             return new SimpleModel()
             {
-                IntValue = RandomHelper.RandomInt(),
-                TestValue = RandomHelper.RandomString()
+                IntValue = RandomHelper.GetRandomInt(),
+                TestValue = RandomHelper.GetRandomString()
             };
         }
 
@@ -79,7 +79,7 @@ namespace RequestHelper.Test
         {
             return new NullableModel()
             {
-                HeightFrom = RandomHelper.RandomInt()
+                HeightFrom = RandomHelper.GetRandomInt()
             };
         }
 
@@ -116,6 +116,47 @@ namespace RequestHelper.Test
                    $"{nameof(model.HeightFrom)}",
                    $"{model.HeightFrom}"),
             };
+
+            RequestParameters expectedCollection = new RequestParameters(expectedParameters);
+
+            Assert.AreEqual(testParameters.ToString(), expectedCollection.ToString());
+        }
+
+        #endregion
+
+        #region DateModel 
+
+        private DateModel GetDateModel()
+        {
+            return new DateModel()
+            {
+                StartDate = RandomHelper.GetRandomDate(),
+                EndDate = RandomHelper.GetRandomNullableDate()
+            };
+        }
+
+
+        [TestMethod]
+        public void DateModelCreateTest()
+        {
+            DateModel model = GetDateModel();
+
+            RequestParameters testParameters = RequestParameters.CreateFromModel(model);
+
+            ParametersDictionary expectedParameters = new ParametersDictionary()
+            {
+                new KeyValuePair<string, string>(
+                   $"{nameof(model.StartDate)}",
+                   $"{model.StartDate}"),
+            };
+
+            if (model.EndDate.HasValue)
+            {
+                expectedParameters.Add(
+                    new KeyValuePair<string, string>(
+                        $"{nameof(model.EndDate)}",
+                        $"{model.EndDate}"));
+            }
 
             RequestParameters expectedCollection = new RequestParameters(expectedParameters);
 

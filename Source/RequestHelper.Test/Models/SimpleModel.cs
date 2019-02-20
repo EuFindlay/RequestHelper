@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RequestHelper.Test.ModelsForConvert
+namespace RequestHelper.Test.Models
 {
     public class SimpleModel
     {
