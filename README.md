@@ -10,8 +10,8 @@ NetCore.RequestHelper is reflection based tool that simplifies the proccess of p
 
 # Documentation 
 
-### Serialization of an data objects to an URL encoded string
-#### 1. Direct from object
+### Serialization of data objects to an URL encoded string
+#### 1. Directly from an object
 ```csharp
 string requestUrl = "http://test-url.com";
 
@@ -35,7 +35,7 @@ parametersCollection.AddParametersToUrl(ref requestUrl);
 
 ### Posting files to API
 
-#### Test model with file property
+#### A test model with a file property
 ```csharp
     public class PhotoModel
     {
@@ -46,7 +46,7 @@ parametersCollection.AddParametersToUrl(ref requestUrl);
     }
 ````
 
-#### Posting model to API from MVC Controller
+#### Posting a model to API from MVC Controller
 ```csharp
         public async Task<IActionResult> LoadStudentPhoto(PhotoModel request)
         {
